@@ -1,16 +1,90 @@
-
 body {
 	font-family:"Antic Slab";
 	padding:0px;
 	margin:0px;
 }
-
-a {
-  color: #00B7FF;
+label {
+	display:block;
+	font-size:90%;
 }
 
-#colorPickerElement {
-	width:500px;
-	height:500px;
-	position:relative;
+div#mainContainer {
+	width:1000px;
+	margin-left:auto;
+	margin-right:auto;
+	background-color:black;
+	color:white;
+	padding:0px;
+	box-shadow:0 0 50px black;
+	overflow:hidden;
+	padding:30px;
+}
+
+/* MAIN */
+main{
+	text-align:center;
+	width:calc(50% - 30px);
+	float:left;
+}
+
+div#colorPickerElement {
+		width:500px;
+		height:500px;
+		position:relative;
+}
+
+h1 {
+		font-size:50px;
+}
+
+
+
+/* SIDE */
+div#side{
+	width:calc(50% - 30px);
+	float:right;
+}
+
+div#programs{
+	padding:20px;
+	border:1px dotted #555555;
+	margin-bottom:20px;
+}
+
+div#design .option {
+	margin:4px;
+	padding:6px;
+	min-width:200px;
+	border:1px solid black;
+	border-radius:10px;
+	color:black;
+	cursor:pointer;
+	background-color:white;
+}
+
+div#designBox {
+	height:400px;
+	overflow-y:scroll;
+	background-color:gray;
+	padding:10px;
+}
+div#designOptions{
+	background-color:#555;
+	padding:10px;
+}
+div#designOptions div.option {
+	display:inline-block;
+	text-align:center;
+}
+div#design div.inputs{
+	display:inline-block;
+	float:right;
+}
+div#design button.jscolorButton {
+	vertical-align:middle;
+	width:20px;
+	height:20px;
+}
+div#design input {
+	vertical-align:middle;
 }

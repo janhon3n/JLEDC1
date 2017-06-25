@@ -1,6 +1,19 @@
 extends layout
 
 block content
-	h1= "Janho LED"
-	div#colorPickerContainer
-		div#colorPicker
+	main
+		h1= "Janho LED"
+		div#colorTriangle
+		div#rgbInfo
+	div#side
+		div#programs
+			label Load saved programs:
+			select
+			label Save program as:
+			input(type="text")
+			input(type="button" value="Save")
+		div#design
+			div#designBox
+			div#designOptions
+				div.option.draggable(action-type="hold") Hold
+				div.option.draggable(action-type="sweep") Sweep

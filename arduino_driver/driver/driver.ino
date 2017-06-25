@@ -5,9 +5,9 @@
  * Leds are controlled with analogWrite (PWM).
  */
 
-int redPin = 11;
-int greenPin = 10;
-int bluePin = 9;
+int redPin = 9;
+int greenPin = 3;
+int bluePin = 6;
 
 float maxValue = 250;
 
@@ -60,11 +60,9 @@ void loop() {
   }
 
   //Send info over serial
-  Serial.println("<");
   Serial.println("Looptime: "+ String(millis() - timeSave) + "ms");
   timeSave = millis();
   Serial.println("Led status: "+ String(ledData[0]) + "R,"+ String(ledData[1]) + "G,"+ String(ledData[2]) + "B,");
-  Serial.println(">");
 }
 
 
