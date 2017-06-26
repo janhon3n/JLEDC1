@@ -60,6 +60,7 @@ div#design .option {
 	color:black;
 	cursor:pointer;
 	background-color:white;
+	box-shadow:1px 1px 2px black;
 }
 
 div#designBox {
@@ -67,6 +68,12 @@ div#designBox {
 	overflow-y:scroll;
 	background-color:gray;
 	padding:10px;
+}
+div#designBox .option[running="true"] {
+	transition: all 0.1s ease-in-out;
+	font-weight:bold;
+	box-shadow:-3px 1px 3px black;
+	margin-left:10px;
 }
 div#designOptions{
 	background-color:#555;
