@@ -59,14 +59,14 @@ div#design .option {
 	border-radius:10px;
 	color:black;
 	cursor:pointer;
-	background-color:white;
+	background-color:#DDD;
 	box-shadow:1px 1px 2px black;
 }
 
 div#designBox {
 	height:400px;
 	overflow-y:scroll;
-	background-color:gray;
+	background-color:#555;
 	padding:10px;
 }
 div#designBox .option[running="true"] {
@@ -76,12 +76,20 @@ div#designBox .option[running="true"] {
 	margin-left:10px;
 }
 div#designOptions{
-	background-color:#555;
+	background-color:#333;
 	padding:10px;
+	height:40px;
+	transition:all 0.4s;
+}
+div#designOptions[trashcanMode="true"] {
+	background-color:red;
 }
 div#designOptions div.option {
 	display:inline-block;
-	text-align:center;
+	transition:opacity 0.4s;
+}
+div#designOptions[trashcanMode="true"] div.option:not(.ui-draggable-dragging) {
+	opacity:0;
 }
 div#design div.inputs{
 	display:inline-block;

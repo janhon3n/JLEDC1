@@ -51,7 +51,7 @@ $(document).ready(function(){
 				});
 				break;
 			case "sweep":
-				el.html('Sweep<div class="inputs"><input name="delay" type="number" min="1" max="6000000" value="1000"><input type="hidden" name="color" value="#FFFFFF"></div>');
+				el.html('Sweep<div class="inputs"><input type="number" name="revolutions" min="-10" max="10" step="1" value="0"><input name="delay" type="number" min="1" max="6000000" value="1000"><input type="hidden" name="color" value="#FFFFFF"></div>');
 				
 				var input = $('<BUTTON class="jscolorButton"></BUTTON>');
 				el.find('.inputs').append(input);
@@ -68,13 +68,14 @@ $(document).ready(function(){
 	
 	//RUNNING THE PROGRAM
 	var framesPerSecond = 60;
+	var speed = 1;
 	
 	var timeout;
 	function handleOption(el){
 		switch(el.attr("action-type")){
 			case "hold":
 				setColorFromProgram(hexToRgb(el.find("input[name='color']").val()));
-				timeout = setTimeout(moveToNext, el.find('input[name="delay"]').val());
+				timeout = setTimeout(moveToNext, el.find('input[name="delay"]').val() / speed);
 				break;
 			case "sweep":
 				var prev;
@@ -90,7 +91,11 @@ $(document).ready(function(){
 				var hslSteps = []
 				console.log(startColor);
 				console.log(endColor);
-				hslSteps['h'] = (endColor['h'] - startColor['h']) / steps;
+				var hueDiff = (endColor['h'] - startColor['h']);
+				if(hueDiff > 0.5) hueDiff -= 1;
+				if(hueDiff < -0.5) hueDiff += 1;
+				hueDiff += el.find('input[name="revolutions"]').val();
+				hslSteps['h'] = hueDiff / steps;
 				hslSteps['s'] = (endColor['s'] - startColor['s']) / steps;
 				hslSteps['l'] = (endColor['l'] - startColor['l']) / steps;
 				console.log(hslSteps);
@@ -103,14 +108,16 @@ $(document).ready(function(){
 		setColorFromProgram(hslToRgb(lastColor['h'], lastColor['s'], lastColor['l']));
 		
 		if(step >= steps) {
-				timeout = setTimeout(moveToNext, 1000 / framesPerSecond);
+				timeout = setTimeout(moveToNext, 1000 / framesPerSecond / speed);
 		} else {
 			lastColor['h'] += hslSteps['h'];
+			if(lastColor['h'] > 1) lastColor['h'] -= 1;
+			if(lastColor['h'] < 0) lastColor['h'] += 1;
 			lastColor['s'] += hslSteps['s'];
 			lastColor['l'] += hslSteps['l'];
 			timeout = setTimeout(function(){
 				sweepStep(step + 1, steps, lastColor, hslSteps);
-			}, 1000 / framesPerSecond);
+			}, 1000 / framesPerSecond / speed);
 		}
 	}
 	
@@ -141,6 +148,8 @@ $(document).ready(function(){
 		handleOption(firstOption);
 	}
 
+	
+	//PROGRAM CONTROLS
 	$("#design #designControl button[name='start']").click(function(){
 		startProgramFromBeginning();
 	});
@@ -149,32 +158,72 @@ $(document).ready(function(){
 		stopProgram();
 	});
 	
+	$("#design #designControl input[name='speed']").change(function(){
+		$("#design #designControl span.speedInfo").html(speedToBPM($(this).val()));
+		speed = $(this).val();
+	});
+	var tempoClickTime;
+	$("#design #designControl button[name='tempo']").click(function(){
+		currentTime = new Date().getTime();
+		var tempoSpeed = 1/((currentTime - tempoClickTime)/1000);
+		console.log(tempoSpeed);
+		if(tempoSpeed < 3000 && tempoSpeed > 0.1){
+			$("#design #designControl input[name='speed']").val(tempoSpeed);
+			$("#design #designControl span.speedInfo").html(speedToBPM(tempoSpeed));
+			speed = tempoSpeed;
+		}
+		tempoClickTime = currentTime;
+	});
+	
+	function speedToBPM(speed){
+		return Math.round(60 * 100 / (1/speed)) / 100;
+	}
+	
 	
 	
 	//DRAGGING
 	$("#designOptions div.option").draggable({
-		cursor:'move',
 		connectToSortable: "#designBox",
 		containment: $("#design"),
 		helper: 'clone',
 		revert: 'invalid',
-		revertDuration: 50
-	})
+		revertDuration: 50,
+		start: function(event, ui){
+			$("#design div#designOptions").attr("trashcanMode", "true");
+		},
+		stop: function(event, ui){
+			$("#design div#designOptions").attr("trashcanMode", "false");
+		}
+	});
+	$("#designOptions").droppable({
+		tolerance: "fit",
+		drop: function(event, ui){
+			if(!(ui.draggable.hasClass("draggable"))){
+				ui.draggable.animate({
+					opacity:0
+				}, 200, function(){ this.remove(); });
+			}
+		}
+	});
 	
 	$("#designBox").sortable({
 		revert: 50,
-		cursor:'move',
 		containment: $("#design"),
 		stop: function(event, ui){
+			console.log();
+			$("#design div#designOptions").attr("trashcanMode", "false");
 			if($(ui.item).hasClass("draggable")){
 				$(ui.item).html("");
 				$(ui.item).removeClass("draggable").removeAttr("style");
 				createOptionElement($(ui.item));
 			}
+		},
+		start: function(event, ui){
+			$("#design div#designOptions").attr("trashcanMode", "true");
 		}
 	});
 	
-	
+	// COLOR SHIT
 	function hexToRgb(hex) {
 		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 		if(result){
