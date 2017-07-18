@@ -45,16 +45,44 @@ div#side{
 	float:right;
 }
 
+div#tabControl div.tabButton {
+	display:inline-block;
+	padding:2px;
+	padding-left:10px;
+	padding-right:10px;
+	font-size:90%;
+	border:1px solid #555;
+	background-color:#111;
+	border-radius: 5px 5px 0 0;
+	cursor:pointer;
+}
+div#tabControl div.tabButton:hover{
+	background-color:#555;
+}
+div#tabControl div.tabButton[tab_active="true"]{
+	background-color:#888;
+	color:black;
+}
+div.tabPage {
+	border:1px solid #555;
+	background-color:#222;
+	padding:10px;
+	display:none;
+}
+div.tabPage[tab_active="true"]{
+	display:block;
+}
 div#programs{
 	padding:20px;
-	border:1px dotted #555555;
+	border:1px dotted black;
 	margin-bottom:20px;
+	background-color:#333;
 }
 
 div#design .option {
 	margin:4px;
 	padding:6px;
-	min-width:200px;
+	min-width:180px;
 	border:1px solid black;
 	border-radius:10px;
 	color:black;
@@ -102,4 +130,9 @@ div#design button.jscolorButton {
 }
 div#design input {
 	vertical-align:middle;
+}
+div#design input[type="number"]{
+	background-color:rgba(255,255,255,0.7);
+	font-size:12px;
+	height:12px;
 }

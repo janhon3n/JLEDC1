@@ -1,4 +1,13 @@
 $(document).ready(function(){
+	
+	//tab controls
+	$(".tabButton").click(function(){
+		$(".tabPage").hide();
+		var childNum = Number($(".tabButton").index($(this)));
+		$(".tabPage").eq(childNum).show();
+	});
+	
+	
 	var triangleElement = $("#colorTriangle");
 	
 	var colorTriangle = new ColorTriangle("#FF0000", {
@@ -38,7 +47,7 @@ $(document).ready(function(){
 	function createOptionElement(el){
 		switch(el.attr("action-type")){
 			case "hold":		
-				el.html('Hold<div class="inputs"><input name="delay" type="number" min="1" max="6000000" value="1000"><input type="hidden" name="color" value="#FFFFFF"></div>');
+				el.html('Hold<div class="inputs"><input name="delay" type="number" min="1" max="60" step="0.1" value="1"><input type="hidden" name="color" value="#FFFFFF"></div>');
 				
 				var input = $('<BUTTON class="jscolorButton"></BUTTON>');
 				el.find('.inputs').append(input);
@@ -51,7 +60,7 @@ $(document).ready(function(){
 				});
 				break;
 			case "sweep":
-				el.html('Sweep<div class="inputs"><input type="number" name="revolutions" min="-10" max="10" step="1" value="0"><input name="delay" type="number" min="1" max="6000000" value="1000"><input type="hidden" name="color" value="#FFFFFF"></div>');
+				el.html('Sweep<div class="inputs"><input type="number" name="revolutions" min="-10" max="10" step="1" value="0"><input name="delay" type="number" min="1" max="60" step="0.1" value="1"><input type="hidden" name="color" value="#FFFFFF"></div>');
 				
 				var input = $('<BUTTON class="jscolorButton"></BUTTON>');
 				el.find('.inputs').append(input);
@@ -75,7 +84,7 @@ $(document).ready(function(){
 		switch(el.attr("action-type")){
 			case "hold":
 				setColorFromProgram(hexToRgb(el.find("input[name='color']").val()));
-				timeout = setTimeout(moveToNext, el.find('input[name="delay"]').val() / speed);
+				timeout = setTimeout(moveToNext, el.find('input[name="delay"]').val() * 1000 / speed);
 				break;
 			case "sweep":
 				var prev;
@@ -86,15 +95,13 @@ $(document).ready(function(){
 				}
 				var startColor = hexToHSL(prev.find("input[name='color']").val());
 				var endColor = hexToHSL(el.find("input[name='color']").val());
-				var delay = el.find("input[name='delay']").val();
+				var delay = el.find("input[name='delay']").val() * 1000;
 				var steps = delay / 1000 * framesPerSecond;
 				var hslSteps = []
-				console.log(startColor);
-				console.log(endColor);
 				var hueDiff = (endColor['h'] - startColor['h']);
 				if(hueDiff > 0.5) hueDiff -= 1;
 				if(hueDiff < -0.5) hueDiff += 1;
-				hueDiff += el.find('input[name="revolutions"]').val();
+				hueDiff += Number(el.find('input[name="revolutions"]').val());
 				hslSteps['h'] = hueDiff / steps;
 				hslSteps['s'] = (endColor['s'] - startColor['s']) / steps;
 				hslSteps['l'] = (endColor['l'] - startColor['l']) / steps;
@@ -158,7 +165,7 @@ $(document).ready(function(){
 		stopProgram();
 	});
 	
-	$("#design #designControl input[name='speed']").change(function(){
+	$("#design #designControl input[name='speed']").on('input', function(){
 		$("#design #designControl span.speedInfo").html(speedToBPM($(this).val()));
 		speed = $(this).val();
 	});
