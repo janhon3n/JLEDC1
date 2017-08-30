@@ -1,6 +1,6 @@
 
-int redPin = 11;
-int greenPin = 10;
+int redPin = 6;
+int greenPin = 3;
 int bluePin = 9;
 
 int maxValue = 255;

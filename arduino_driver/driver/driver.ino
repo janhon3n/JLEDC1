@@ -5,9 +5,9 @@
  * Leds are controlled with analogWrite (PWM).
  */
 
-int redPin = 9;
+int redPin = 6;
 int greenPin = 3;
-int bluePin = 6;
+int bluePin = 9;
 
 float maxValue = 250;
 

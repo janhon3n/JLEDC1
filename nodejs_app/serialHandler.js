@@ -1,5 +1,5 @@
 var SerialPort = require("serialport");
-var port = new SerialPort("COM7", {baudRate: 9600});
+var port = new SerialPort("COM10", {baudRate: 9600});
 var portReady = false;
 
 var newValue = false;
